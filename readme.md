@@ -12,11 +12,11 @@ The process of ReluVal is by passing the target DNN to the Symbolic constraint p
 
 
 
-Step1:<br>
+**Step1:**<br>
 Lets consider the below DNN example which represents an unmanned aerial vehicle.<br> 
 Inputs are: distance from the intruder and intruder approaching angle <br>
 Output: steering angle<br> <br>
-Assumption:<br>
+**Assumption:**<br>
 Let us assume that our goal is to confirm the safety of the predicted steering angle by examining a property that states that the steering angle should be less than 20 if the intruder's distance is in [4,6] and their potential angle of approach is in [1,5].
 
 ![img_8.png](img_8.png)
@@ -52,12 +52,11 @@ Input interval bound values are substituted to the formula generated for the out
 
 ![img_10.png](img_10.png)
 
-Step3:<br>
+**Step3:**<br><br>
 Property check:
-
 In this case we get output interval as [6,16]. It was better than naive approach but does over approximation. So, we go with bisection of intervals<br>
 So we are not going to consider this as safe or adversarial output, so we are proceeding with step4.<br><br>
-Step4:<br>
+**Step4:**
 # Iterative Interval Refinement using Bisection
 
 Iterative Interval Refinement has same process as of Naive interval propagation approach in addition with bisection<br>
@@ -240,12 +239,13 @@ This dataset, which is a standard benchmark in machine learning for image classi
 Common benchmarks such as MNIST and CIFAR-10 are not specifically included in the table. Rather, properties designated as Φ1 through Φ15 are listed in the paper. These attributes, which are probably unique to the networks or models under review, might stand in for particular traits or performance standards like robustness, safety, or functional correctness. Security Properties is stated as the source for some of these features, implying a connection to another study or paper. Additionally, the table splits the attributes into two categories, which can represent various sets or classifications of assessments. The 'Networks' column indicates how many networks are tested for each attribute. 
 
 
-**Comparison to other tools:**<br> 
+**Comparison to other tools**<br> 
 **Reluplex:**<br>
 ![img_20.png](img_20.png)
 <br>The time in seconds that each tool takes to evaluate the properties is shown in the columns labeled "Reluplex Time" and "ReluVal Time." The 'Speedup' column appears to be comparing ReluVal's performance to that of Reluplex, indicating the number of times faster ReluVal is. ReluVal outperforms Reluplex by almost 30 times for property Φ1, for instance. The times vary: some properties (example 4729x for Φ5) show a large speedup, while other qualities (other example: 1x for Φ2) show little to no speedup.
 <br>ReluVal completes evaluations more quickly than Reluplex when verifying properties of ACAS Xu neural network models. The provided tables and text indicate that ReluVal consistently outperforms Reluplex across various security properties, achieving a significant speedup—up to 200 times faster in some cases. This performance advantage is reflected in scenarios where Reluplex times out, while ReluVal is able to terminate and provide results in a much shorter time frame. The comparison showcases ReluVal's efficiency and effectiveness in the verification of safety properties for neural networks in critical applications such as collision avoidance systems for unmanned aircraft.
 <br>**The data show that ReluVal typically completes evaluations more quickly than Reluplex for the assets listed.**
+<br>
 
 **Carlini and Wagner (CW) attack**:<br>
 The Carlini-Wagner (CW) attack, being a gradient-based method, relies on initial seed inputs to start the iterative process of crafting adversarial examples. The attack algorithm applies small changes to the seed inputs in the direction that increases the model's prediction error, guided by the gradients of the model's loss function with respect to the input.
@@ -257,6 +257,16 @@ The Carlini-Wagner (CW) attack, being a gradient-based method, relies on initial
 <br>With 30 seeds, CW's miss rate was 58.5%.
 <br>With 20 seeds, CW missed 75% of the adversarial inputs.
 <br>With 10 seeds, CW had the highest miss rate at 85%.
+<br>
 <br>In all scenarios, ReluVal did not miss any adversarial inputs, indicating a 0% miss rate and showcasing its effectiveness in detecting adversarial examples compared to the CW attack. This suggests that ReluVal is significantly more reliable for identifying adversarial cases in the ACAS Xu models than the gradient-based CW method, which is notably sensitive to the choice of seed inputs.
 <br>Performance of the Carlini-Wagner (CW) attack against ReluVal in finding adversarial inputs across 40 adversarial properties of ACAS Xu models. A high number of misses indicates that the CW attack, starting from that specific number of seed inputs, was unable to find many of the adversarial examples that exist, highlighting the limitation of being dependent on the starting point of the attack. In contrast, ReluVal's performance is independent of seed inputs, as it does not require a starting example to begin its verification process
 <br>**Hence the 0% miss rate across all scenarios.**
+
+# Main results
+
+ReluVal vs. Reluplex: ReluVal regularly outperforms Reluplex in the verification of safety properties, with an average speedup of up to 200x. ReluVal finishes all evaluations much faster than Reluplex, which sometimes times out and is unable to finish the assessment.
+<br>ReluVal vs. Carlini-Wagner Attack: ReluVal finds a lot more adversarial examples than the Carlini-Wagner attack technique when it comes to adversarial input detection. Throughout multiple tests, ReluVal never misses an adversarial input, while the Carlini-Wagner attack frequently misses things, particularly when there are fewer seed inputs available.
+<br>It mentions that a neural network that achieves 98.28% accuracy on the MNIST test dataset, which is a standalone result indicating high performance in classifying handwritten digits.
+<br>
+There is no direct comparison provided for other benchmarks like CIFAR-10 in the given data. The focus of the evaluation is mainly on the verification of safety properties in ACAS Xu models and the classification accuracy of a neural network on the MNIST dataset.
+<br>The evaluation results, in summary, highlight ReluVal's superiority in terms of speed and thoroughness when it comes to verifying neural networks against the specified properties and benchmarks. Although no comparative data is provided for the MNIST benchmark, the neural network's reported high accuracy suggests a strong performance for this particular classification task.
